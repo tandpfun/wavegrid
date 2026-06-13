@@ -1,0 +1,46 @@
+{
+  "name": "@illuminate/simulator",
+  "version": "0.0.1",
+  "author": "Dan Lynch <pyramation@gmail.com>",
+  "description": "7×7 RGB grid simulator with smooth transitions",
+  "main": "index.js",
+  "module": "esm/index.js",
+  "types": "index.d.ts",
+  "homepage": "https://github.com/constructive-io/Illuminate",
+  "license": "SEE LICENSE IN LICENSE",
+  "publishConfig": {
+    "access": "restricted",
+    "directory": "dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/constructive-io/Illuminate"
+  },
+  "bugs": {
+    "url": "https://github.com/constructive-io/Illuminate/issues"
+  },
+  "scripts": {
+    "clean": "makage clean",
+    "prepack": "npm run build",
+    "build": "makage build",
+    "build:dev": "makage build --dev",
+    "lint": "eslint src --fix",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch",
+    "dev": "ts-node src/server.ts"
+  },
+  "keywords": [
+    "laser",
+    "osc",
+    "lighting",
+    "simulator",
+    "7x7"
+  ],
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.13",
+    "makage": "^0.3.0"
+  }
+}
