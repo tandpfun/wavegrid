@@ -37,4 +37,36 @@ describe('Receiver', () => {
     const r = new Receiver({ output });
     expect(r.status).toBe('reconnecting');
   });
+
+  describe('sharding', () => {
+    it('should return full grid when no shard config', () => {
+      const r = new Receiver();
+      expect(r.getOutputState()).toHaveLength(49);
+    });
+
+    it('should return only sharded range when shard is configured', () => {
+      const r = new Receiver({ shard: { start: 0, end: 39 } });
+      const state = r.getOutputState();
+      expect(state).toHaveLength(40);
+    });
+
+    it('should return correct subset for second shard', () => {
+      const r = new Receiver({ shard: { start: 40, end: 48 } });
+      const state = r.getOutputState();
+      expect(state).toHaveLength(9);
+    });
+
+    it('should return single cannon shard', () => {
+      const r = new Receiver({ shard: { start: 24, end: 24 } });
+      const state = r.getOutputState();
+      expect(state).toHaveLength(1);
+    });
+
+    it('shards should cover full grid without overlap', () => {
+      const rA = new Receiver({ shard: { start: 0, end: 39 } });
+      const rB = new Receiver({ shard: { start: 40, end: 48 } });
+      const totalCannons = rA.getOutputState().length + rB.getOutputState().length;
+      expect(totalCannons).toBe(49);
+    });
+  });
 });

@@ -22,6 +22,13 @@ import {
   tickFilter
 } from './filter';
 
+export interface ShardConfig {
+  /** First cannon index (inclusive). */
+  start: number;
+  /** Last cannon index (inclusive). */
+  end: number;
+}
+
 export interface ReceiverConfig {
   /** Input adapter — where state comes from. */
   input: InputAdapter;
@@ -35,6 +42,13 @@ export interface ReceiverConfig {
   fallback: FallbackConfig;
   /** Tick rate in ms (default 1000/60 ~ 16.67ms). */
   tickMs: number;
+  /**
+   * Optional shard — only output cannons in this index range.
+   * When omitted, the receiver outputs all cannons.
+   * The LP filter still processes the full grid; sharding only
+   * affects which cannons are sent to the output adapter.
+   */
+  shard?: ShardConfig;
 }
 
 export const DEFAULT_RECEIVER_CONFIG: ReceiverConfig = {
@@ -74,13 +88,16 @@ export class Receiver {
   get status(): ReceiverStatus { return this._status; }
   get fallbackActive(): boolean { return this._fallbackActive; }
 
-  /** Get the current output state (after filtering). */
+  /** Get the current output state (after filtering and sharding). */
   getOutputState(): CannonState[] {
-    return this.grid.map(c => ({
+    const full = this.grid.map(c => ({
       h: c.h,
       s: c.s,
       b: c.b
     }));
+    const shard = this.config.shard;
+    if (!shard) return full;
+    return full.slice(shard.start, shard.end + 1);
   }
 
   /** Start the receiver — connects input and begins the tick loop. */
