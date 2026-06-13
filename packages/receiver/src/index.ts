@@ -11,5 +11,5 @@ export type { FallbackConfig } from './fallback';
 export { computeFallbackFrame, DEFAULT_FALLBACK_CONFIG } from './fallback';
 
 // Receiver
-export type { ReceiverConfig, ReceiverState, ReceiverStatus } from './receiver';
+export type { ReceiverConfig, ReceiverState, ReceiverStatus, ShardConfig } from './receiver';
 export { Receiver } from './receiver';

@@ -6,12 +6,22 @@
  */
 
 import { ConsoleOutput, MultiOutput, OutputAdapter, WebSocketInput, WebSocketOutput } from './adapters';
-import { Receiver } from './receiver';
+import { Receiver, ShardConfig } from './receiver';
 
 const SIMULATOR_URL = process.env.SIMULATOR_URL || 'ws://localhost:3000';
 const ALPHA = parseFloat(process.env.RECEIVER_ALPHA || '0.06');
 const FALLBACK_DELAY = parseInt(process.env.FALLBACK_DELAY || '3000', 10);
 const WS_OUTPUT_PORT = process.env.WS_OUTPUT_PORT ? parseInt(process.env.WS_OUTPUT_PORT, 10) : undefined;
+
+// Shard config: SHARD_START and SHARD_END define the cannon range this receiver handles.
+// When omitted, the receiver outputs all 49 cannons.
+let shard: ShardConfig | undefined;
+if (process.env.SHARD_START !== undefined && process.env.SHARD_END !== undefined) {
+  shard = {
+    start: parseInt(process.env.SHARD_START, 10),
+    end: parseInt(process.env.SHARD_END, 10)
+  };
+}
 
 // ─── Input adapter ───
 const input = new WebSocketInput({ url: SIMULATOR_URL });
@@ -33,7 +43,8 @@ const receiver = new Receiver({
   input,
   output,
   alpha: ALPHA,
-  fallbackDelay: FALLBACK_DELAY
+  fallbackDelay: FALLBACK_DELAY,
+  shard
 });
 
 console.log('');
@@ -45,6 +56,8 @@ console.log('');
 console.log(`  \u2192 Input:  WebSocket @ ${SIMULATOR_URL}`);
 console.log(`  \u2192 Output: Console${wsOutput ? ` + WebSocket :${WS_OUTPUT_PORT}` : ''}`);
 console.log(`  \u2192 Alpha: ${ALPHA}  Fallback delay: ${FALLBACK_DELAY}ms`);
+console.log(`  \u2192 Shard: ${shard ? `cannons ${shard.start}\u2013${shard.end} (${shard.end - shard.start + 1} of 49)` : 'all cannons (no shard)'}`);
+
 console.log('');
 
 receiver.start();
