@@ -1,6 +1,6 @@
 {
   "name": "@wavegrid/relay",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Dan Lynch <pyramation@gmail.com>",
   "description": "Transparent WebSocket relay — routes control messages between canvases, simulators, and receivers",
   "main": "index.js",
