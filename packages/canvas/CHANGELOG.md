@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/constructive-io/Illuminate/compare/@wavegrid/canvas@0.2.1...@wavegrid/canvas@0.3.0) (2026-06-14)
+
+### Features
+
+- configurable grid size across all packages + README updates ([e92b87d](https://github.com/constructive-io/Illuminate/commit/e92b87dc3b76dd1671106ce39bd864fd62e3c170))
+
 ## [0.2.1](https://github.com/constructive-io/Illuminate/compare/@wavegrid/canvas@0.2.0...@wavegrid/canvas@0.2.1) (2026-06-13)
 
 **Note:** Version bump only for package @wavegrid/canvas
