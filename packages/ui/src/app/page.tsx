@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from 'react';
 
 import { AudioTab } from '@/components/audio-tab';
+import { BrightnessTab, useBrightnessAnimation } from '@/components/brightness-tab';
 import { ColorWheel } from '@/components/color-wheel';
 import { DropsControls, useDrops } from '@/components/drops-tab';
 import { FlagsTab, useFlagAnimation } from '@/components/flags-tab';
@@ -29,6 +30,7 @@ const tabs: { key: GridMode; label: string }[] = [
   { key: 'scenes', label: 'Scenes' },
   { key: 'animations', label: 'Animations' },
   { key: 'flags', label: 'Flags' },
+  { key: 'brightness', label: 'Brightness' },
   { key: 'audio', label: 'Audio' }
 ];
 
@@ -43,6 +45,7 @@ function ToolPanel({
   motion, activeScene, handleScene,
   activeAnim, handleAnim, handleAnimStop,
   flags,
+  brightness,
   audio
 }: {
   tab: GridMode;
@@ -63,6 +66,7 @@ function ToolPanel({
   handleAnim: (name: string) => void;
   handleAnimStop: () => void;
   flags: ReturnType<typeof useFlagAnimation>;
+  brightness: ReturnType<typeof useBrightnessAnimation>;
   audio: ReturnType<typeof useAudio>;
 }) {
   const isRight = layout === 'right';
@@ -205,6 +209,15 @@ function ToolPanel({
           />
         )}
 
+        {tab === 'brightness' && (
+          <BrightnessTab
+            config={brightness.config}
+            onMode={brightness.setMode}
+            onSpeed={brightness.setSpeed}
+            onIntensity={brightness.setIntensity}
+          />
+        )}
+
         {tab === 'audio' && (
           <AudioTab audio={audio} />
         )}
@@ -271,6 +284,9 @@ export default function Home() {
 
   // Flags engine (animation loop lives inside the hook)
   const flags = useFlagAnimation(send);
+
+  // Brightness overlay engine (cross-cuts any current state)
+  const brightness = useBrightnessAnimation(NUM_CANNONS, GRID_COLUMNS, gridData, send);
 
   const handleScene = useCallback(
     (name: string) => {
@@ -358,6 +374,7 @@ export default function Home() {
     motion, activeScene, handleScene,
     activeAnim, handleAnim, handleAnimStop,
     flags,
+    brightness,
     audio
   };
 
