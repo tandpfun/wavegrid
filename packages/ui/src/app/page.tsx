@@ -5,6 +5,7 @@ import { useCallback, useRef, useState } from 'react';
 import { AudioTab } from '@/components/audio-tab';
 import { ColorWheel } from '@/components/color-wheel';
 import { DropsControls, useDrops } from '@/components/drops-tab';
+import { FlagsTab } from '@/components/flags-tab';
 import { GradientBar, useGradient } from '@/components/gradient-tab';
 import type { GridMode } from '@/components/grid-display';
 import { GridDisplay } from '@/components/grid-display';
@@ -27,6 +28,7 @@ const tabs: { key: GridMode; label: string }[] = [
   { key: 'motion', label: 'Motion' },
   { key: 'scenes', label: 'Scenes' },
   { key: 'animations', label: 'Animations' },
+  { key: 'flags', label: 'Flags' },
   { key: 'audio', label: 'Audio' }
 ];
 
@@ -40,6 +42,7 @@ function ToolPanel({
   energyValue, handleEnergyChange,
   motion, activeScene, handleScene,
   activeAnim, handleAnim, handleAnimStop,
+  activeFlag, handleFlag,
   audio
 }: {
   tab: GridMode;
@@ -59,6 +62,8 @@ function ToolPanel({
   activeAnim: string | null;
   handleAnim: (name: string) => void;
   handleAnimStop: () => void;
+  activeFlag: string | null;
+  handleFlag: (name: string, cells: { index: number; h: number; s: number; b: number }[]) => void;
   audio: ReturnType<typeof useAudio>;
 }) {
   const isRight = layout === 'right';
@@ -190,6 +195,10 @@ function ToolPanel({
           />
         )}
 
+        {tab === 'flags' && (
+          <FlagsTab active={activeFlag} onSelect={handleFlag} />
+        )}
+
         {tab === 'audio' && (
           <AudioTab audio={audio} />
         )}
@@ -223,6 +232,7 @@ export default function Home() {
   }, []);
   const [activeScene, setActiveScene] = useState<string | null>(null);
   const [activeAnim, setActiveAnim] = useState<string | null>(null);
+  const [activeFlag, setActiveFlag] = useState<string | null>(null);
   const [energyValue, setEnergyValue] = useState(80);
   const [dropsConfig, setDropsConfig] = useState({
     spectrumStart: 0,
@@ -249,6 +259,17 @@ export default function Home() {
   const handleCannon = useCallback(
     (index: number, h: number, s: number, b: number) => {
       send({ type: 'cannon', index, h, s, b });
+    },
+    [send]
+  );
+
+  const handleFlag = useCallback(
+    (name: string, cells: { index: number; h: number; s: number; b: number }[]) => {
+      setActiveFlag(name);
+      setActiveAnim(null);
+      for (const c of cells) {
+        send({ type: 'cannon', index: c.index, h: c.h, s: c.s, b: c.b });
+      }
     },
     [send]
   );
@@ -338,6 +359,7 @@ export default function Home() {
     energyValue, handleEnergyChange,
     motion, activeScene, handleScene,
     activeAnim, handleAnim, handleAnimStop,
+    activeFlag, handleFlag,
     audio
   };
 
