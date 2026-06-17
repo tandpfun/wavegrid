@@ -14,6 +14,8 @@ export type {
   RoutingConfig
 } from './osc-adapters';
 export {
+  BEYOND_COLOR_MIN,
+  BEYOND_COLOR_MAX,
   BeyondOscOutput,
   DEBUG_OSC,
   FB4OscOutput,

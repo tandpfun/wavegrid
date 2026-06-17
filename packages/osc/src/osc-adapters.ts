@@ -69,9 +69,18 @@ export interface BeyondOscConfig {
   sendEveryNFrames?: number;
 }
 
-/** Map hue (0–360) to BEYOND ColorSlider (0–255). */
+/**
+ * BEYOND ColorSlider range — the usable portion of the 0–255 slider.
+ * Below min the slider falls off to black; above max it desaturates to white.
+ * Override with BEYOND_COLOR_MIN / BEYOND_COLOR_MAX env vars.
+ */
+export const BEYOND_COLOR_MIN = Number(process.env.BEYOND_COLOR_MIN) || 28;
+export const BEYOND_COLOR_MAX = Number(process.env.BEYOND_COLOR_MAX) || 218;
+
+/** Map hue (0–360) linearly into the usable BEYOND ColorSlider range. */
 export function hueToColorSlider(h: number): number {
-  return ((h % 360) + 360) % 360 * (255 / 360);
+  const hue = ((h % 360) + 360) % 360;
+  return BEYOND_COLOR_MIN + (hue / 360) * (BEYOND_COLOR_MAX - BEYOND_COLOR_MIN);
 }
 
 /** Map saturation (0–100) to BEYOND Saturation (-100 to 100). */

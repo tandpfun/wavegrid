@@ -27,16 +27,24 @@ function makeSingleGrid(index: number, h: number, s: number, b: number): CannonS
 // ═══════════════════════════════════════════════════
 
 describe('hueToColorSlider', () => {
-  it('should map 0 hue to 0', () => {
-    expect(hueToColorSlider(0)).toBeCloseTo(0);
+  it('should map 0° to BEYOND_COLOR_MIN (28)', () => {
+    expect(hueToColorSlider(0)).toBeCloseTo(28);
   });
 
-  it('should map 360 hue to 0 (wraps)', () => {
-    expect(hueToColorSlider(360)).toBeCloseTo(0);
+  it('should map 180° to midpoint of range', () => {
+    expect(hueToColorSlider(180)).toBeCloseTo(123); // 28 + 0.5 * 190 = 123
   });
 
-  it('should map 180 hue to ~127.5', () => {
-    expect(hueToColorSlider(180)).toBeCloseTo(127.5);
+  it('should approach BEYOND_COLOR_MAX near 360°', () => {
+    expect(hueToColorSlider(359)).toBeCloseTo(217.5, 0);
+  });
+
+  it('should wrap at 360', () => {
+    expect(hueToColorSlider(360)).toBeCloseTo(hueToColorSlider(0));
+  });
+
+  it('should handle negative hues', () => {
+    expect(hueToColorSlider(-30)).toBeCloseTo(hueToColorSlider(330));
   });
 });
 
@@ -61,7 +69,7 @@ describe('encodeBeyondMessages', () => {
 
     expect(messages).toHaveLength(3);
     expect(messages[0].address).toBe('/beyond/zone/3/livecontrol/ColorSlider');
-    expect(messages[0].value).toBeCloseTo(0); // hue 0 → ColorSlider 0
+    expect(messages[0].value).toBeCloseTo(28); // hue 0 → ColorSlider 28 (Red)
     expect(messages[1].address).toBe('/beyond/zone/3/livecontrol/Saturation');
     expect(messages[1].value).toBe(0); // sat 100 → Saturation 0
     expect(messages[2].address).toBe('/beyond/zone/3/livecontrol/Brightness');
@@ -91,7 +99,7 @@ describe('encodeBeyondMessages', () => {
     const messages = encodeBeyondMessages(grid, { 0: 0 });
 
     expect(messages[0].address).toBe('/beyond/zone/0/livecontrol/ColorSlider');
-    expect(messages[0].value).toBeCloseTo(127.5);
+    expect(messages[0].value).toBeCloseTo(123); // hue 180 → midpoint of 28–218 range
   });
 
   it('should return empty array when no cannons are mapped', () => {
@@ -232,7 +240,7 @@ describe('BeyondOscOutput (UDP integration)', () => {
 
     const colorPkt = mock.packets.find(p => p.address === '/beyond/zone/5/livecontrol/ColorSlider');
     expect(colorPkt).toBeDefined();
-    expect(colorPkt!.args[0]).toBeCloseTo(0, 0); // hue 0 → ColorSlider 0
+    expect(colorPkt!.args[0]).toBeCloseTo(28, 0); // hue 0 → ColorSlider 28 (Red)
     expect(typeof colorPkt!.args[0]).toBe('number');
 
     const satPkt = mock.packets.find(p => p.address === '/beyond/zone/5/livecontrol/Saturation');
@@ -344,7 +352,7 @@ describe('RoutedOscOutput', () => {
 
     const beyondColor = beyondMock.packets.find(p => p.address === '/beyond/zone/3/livecontrol/ColorSlider');
     expect(beyondColor).toBeDefined();
-    expect(beyondColor!.args[0]).toBeCloseTo(0, 0); // hue 0 → ColorSlider 0
+    expect(beyondColor!.args[0]).toBeCloseTo(28, 0); // hue 0 → ColorSlider 28 (Red)
 
     const fb4Red = fb4Mock.packets.find(p => p.address === '/FB4-02356/color_red');
     expect(fb4Red).toBeDefined();
