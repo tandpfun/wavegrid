@@ -141,17 +141,24 @@ function handleMessage(msg: any) {
 }
 
 // Animation loop: tick interpolation and broadcast
+// Keepalive: broadcast at least once per second even when grid is static,
+// so downstream receivers don't mistake silence for signal loss.
+let framesSinceLastBroadcast = 0;
+const KEEPALIVE_FRAMES = 60; // ~1 second at 60fps
+
 setInterval(() => {
   if (currentAnimation && animations[currentAnimation]) {
     animations[currentAnimation](grid, animationTick, currentAttack, GRID_COLUMNS);
     animationTick++;
   }
   const changed = tickGrid(grid, currentAlpha);
-  if (changed || audioLayer) {
+  framesSinceLastBroadcast++;
+  if (changed || audioLayer || framesSinceLastBroadcast >= KEEPALIVE_FRAMES) {
     const output = audioLayer
       ? compositeLayer(grid, audioLayer, audioBlend)
       : grid.map(c => ({ h: c.h, s: c.s, b: c.b }));
     broadcastComposite(output);
+    framesSinceLastBroadcast = 0;
   }
 }, TICK_MS);
 
