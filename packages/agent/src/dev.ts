@@ -17,9 +17,15 @@ import { createLocalUiSink } from './local-ui-sink';
 import { createRelayClient } from './relay-client';
 import type { AgentCommand, RuntimeState } from './types';
 
-const RELAY_URL = process.argv.find(a => a.startsWith('ws'))
-  ?? process.argv[process.argv.indexOf('--relay') + 1]
-  ?? null;
+function parseRelayUrl(): string | null {
+  const wsArg = process.argv.find(a => a.startsWith('ws://') || a.startsWith('wss://'));
+  if (wsArg) return wsArg;
+  const idx = process.argv.indexOf('--relay');
+  if (idx !== -1 && idx + 1 < process.argv.length) return process.argv[idx + 1];
+  return process.env.RELAY_URL ?? null;
+}
+
+const RELAY_URL = parseRelayUrl();
 
 const COUNT = 49; // 7×7 grid
 
