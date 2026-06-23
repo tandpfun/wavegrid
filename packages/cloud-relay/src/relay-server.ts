@@ -9,9 +9,11 @@
  *   5. Serves host.js + programs.js for the pattern gallery's live previews
  */
 
-import http from 'http';
 import crypto from 'crypto';
-import { WebSocketServer, WebSocket } from 'ws';
+import { readFileSync } from 'fs';
+import http from 'http';
+import { WebSocket,WebSocketServer } from 'ws';
+
 import type { RelayCommand, RelayServerConfig, RelayState } from './types';
 
 function cookies(req: http.IncomingMessage): Record<string, string> {
@@ -49,16 +51,10 @@ export function createRelayServer(config: RelayServerConfig = {}): RelayServerHa
   let hostJs = '';
   let programsJs = '';
   if (config.hostJsPath) {
-    try {
-      const fs = require('fs');
-      hostJs = fs.readFileSync(config.hostJsPath, 'utf8');
-    } catch { /* ignore */ }
+    try { hostJs = readFileSync(config.hostJsPath, 'utf8'); } catch { /* ignore */ }
   }
   if (config.programsJsPath) {
-    try {
-      const fs = require('fs');
-      programsJs = fs.readFileSync(config.programsJsPath, 'utf8');
-    } catch { /* ignore */ }
+    try { programsJs = readFileSync(config.programsJsPath, 'utf8'); } catch { /* ignore */ }
   }
 
   const sessions = new Set<string>();
@@ -67,7 +63,7 @@ export function createRelayServer(config: RelayServerConfig = {}): RelayServerHa
 
   const relayState: RelayState = {
     agentConnected: false,
-    agentSeen: 0,
+    agentSeen: 0
   };
 
   function sendToAgent(cmd: RelayCommand): boolean {
@@ -107,7 +103,7 @@ export function createRelayServer(config: RelayServerConfig = {}): RelayServerHa
       res.setHeader('content-type', 'application/json');
       return res.end(JSON.stringify({
         agent: relayState.agentConnected,
-        seen: relayState.agentSeen,
+        seen: relayState.agentSeen
       }));
     }
 
@@ -202,6 +198,6 @@ export function createRelayServer(config: RelayServerConfig = {}): RelayServerHa
       sessions.clear();
       wss.close();
       server.close();
-    },
+    }
   };
 }
