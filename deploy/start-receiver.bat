@@ -1,10 +1,12 @@
 @echo off
-REM Start the wavegrid receiver with dual-PC routing.
-REM Run this on the Windows PC (PC1) where BEYOND is installed.
-REM
-REM Update SIMULATOR_URL to point to your cloud droplet running the simulator.
+cd /d C:\Users\chris\Documents\laser_code\Illuminate
 
-set SIMULATOR_URL=ws://YOUR_DROPLET_IP:3000
-set ROUTING_CONFIG=examples\routing-production.json
+set SIMULATOR_URL=ws://DROPLET_IP:3000
+set BEYOND_COLOR_MODE=rgb
+set BEYOND_HOST=127.0.0.1
+set BEYOND_PORT=8000
+set SHARD_START=0
+set SHARD_END=48
+set DEBUG_OSC=1
 
 pnpm dev:receiver
