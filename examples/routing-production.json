@@ -3,12 +3,12 @@
     "pc1": {
       "type": "beyond",
       "host": "127.0.0.1",
-      "port": 7001
+      "port": 8000
     },
     "pc2": {
       "type": "beyond",
       "host": "PC2_IP",
-      "port": 7001
+      "port": 8000
     }
   },
   "flushHz": 30,
