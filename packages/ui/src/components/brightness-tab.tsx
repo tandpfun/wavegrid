@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { CannonColor } from '@/lib/use-socket';
 
+import { ControlGrid, ControlGroup } from './control-grid';
+
 export type BrightnessMode = 'off' | 'breathe' | 'ripple' | 'wave' | 'fire' | 'shimmer';
 
 interface BrightnessConfig {
@@ -209,39 +211,41 @@ export function BrightnessTab({
   onResnapshot: () => void;
 }) {
   return (
-    <div className="space-y-3">
+    <ControlGrid minCellWidth={240}>
       {/* Mode swatches */}
-      <div className="flex gap-2.5 flex-wrap">
-        {MODES.map((m) => (
-          <button
-            key={m.key}
-            onClick={() => onMode(m.key)}
-            className="relative overflow-hidden transition-transform active:scale-93"
-            style={{
-              width: 72,
-              height: 72,
-              borderRadius: 16,
-              background: MODE_GRADIENTS[m.key],
-              border: config.mode === m.key ? '2.5px solid #fff' : '2.5px solid transparent'
-            }}
-          >
-            <span
-              className="absolute bottom-1 left-0 right-0 text-center text-white font-semibold"
+      <ControlGroup label="Mode">
+        <div className="flex gap-2.5 flex-wrap">
+          {MODES.map((m) => (
+            <button
+              key={m.key}
+              onClick={() => onMode(m.key)}
+              className="relative overflow-hidden transition-transform active:scale-93"
               style={{
-                fontSize: 10,
-                textShadow: '0 1px 4px rgba(0,0,0,0.8)',
-                letterSpacing: '0.03em'
+                width: 72,
+                height: 72,
+                borderRadius: 16,
+                background: MODE_GRADIENTS[m.key],
+                border: config.mode === m.key ? '2.5px solid #fff' : '2.5px solid transparent'
               }}
             >
-              {m.label}
-            </span>
-          </button>
-        ))}
-      </div>
+              <span
+                className="absolute bottom-1 left-0 right-0 text-center text-white font-semibold"
+                style={{
+                  fontSize: 10,
+                  textShadow: '0 1px 4px rgba(0,0,0,0.8)',
+                  letterSpacing: '0.03em'
+                }}
+              >
+                {m.label}
+              </span>
+            </button>
+          ))}
+        </div>
+      </ControlGroup>
 
       {/* Sliders + resnapshot */}
       {config.mode !== 'off' && (
-        <div className="space-y-2">
+        <ControlGroup label="Parameters">
           <div className="flex items-center gap-3">
             <span
               className="text-sm font-medium"
@@ -303,8 +307,8 @@ export function BrightnessTab({
           >
             Colors are captured when you pick a mode. Change the scene/flag first, then tap Recapture.
           </p>
-        </div>
+        </ControlGroup>
       )}
-    </div>
+    </ControlGrid>
   );
 }

@@ -117,9 +117,9 @@ function ToolContent({
       )}
 
       {tab === 'energy' && (
-        <div className="space-y-3">
+        <div className="space-y-4">
           <p className="text-sm font-medium" style={{ color: '#888898', letterSpacing: '0.05em' }}>ENERGY</p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <input
               type="range"
               className="flex-1"
@@ -128,7 +128,7 @@ function ToolContent({
               value={energyValue}
               onChange={(e) => handleEnergyChange(Number(e.target.value))}
             />
-            <span className="text-base font-mono" style={{ color: '#e8e8f0', minWidth: 44, textAlign: 'right' }}>
+            <span className="text-base font-mono shrink-0" style={{ color: '#e8e8f0', minWidth: 44, textAlign: 'right' }}>
               {energyValue}%
             </span>
           </div>
@@ -266,7 +266,7 @@ function ToolPanel({
       style={{
         background: '#0c0c12',
         ...(isRight
-          ? { borderLeft: '1px solid #1a1a25', width: 360 }
+          ? { borderLeft: '1px solid #1a1a25', width: 380 }
           : { borderTop: '1px solid #1a1a25' })
       }}
     >
@@ -274,7 +274,7 @@ function ToolPanel({
 
       <div
         className={isRight ? 'flex-1 overflow-y-auto' : ''}
-        style={{ padding: isRight ? '8px 14px 14px' : '8px 16px 20px', minHeight: isRight ? 0 : 140 }}
+        style={{ padding: isRight ? '10px 16px 16px' : '10px 20px 24px', minHeight: isRight ? 0 : 140 }}
       >
         <ToolContent tab={tab} {...toolContentProps} />
       </div>
@@ -311,7 +311,7 @@ function MasterSliders({
 
   if (vertical) {
     return (
-      <div className="space-y-4 p-4">
+      <div className="space-y-3 p-4">
         {sliders.map((s) => (
           <div key={s.label} className="flex items-center gap-3">
             <span className="text-sm font-medium" style={{ color: '#888898', minWidth: 56 }}>
@@ -337,19 +337,20 @@ function MasterSliders({
   return (
     <>
       {sliders.map((s) => (
-        <div key={s.label} className="flex items-center gap-2">
-          <span className="text-xs font-medium" style={{ color: '#888898', textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: 11 }}>
+        <div key={s.label} className="flex items-center gap-2" style={{ minWidth: 0 }}>
+          <span className="text-xs font-medium shrink-0" style={{ color: '#888898', textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: 11 }}>
             {s.label}
           </span>
           <input
             type="range"
-            style={{ width: 100 }}
+            className="flex-1"
+            style={{ minWidth: 80 }}
             min={0}
             max={100}
             value={s.value}
             onChange={throttledSlider(s.handler)}
           />
-          <span className="text-xs font-mono" style={{ color: '#888898', minWidth: 28, textAlign: 'right' }}>
+          <span className="text-xs font-mono shrink-0" style={{ color: '#888898', minWidth: 28, textAlign: 'right' }}>
             {s.value}
           </span>
         </div>
@@ -598,20 +599,20 @@ export default function Home() {
               throttledSlider={throttledSlider}
               vertical
             />
-            <div className="flex items-center gap-2 px-4 pb-4">
+            <div className="flex items-center gap-3 px-4 pb-4">
               <span className="text-sm font-medium" style={{ color: '#888898', minWidth: 56 }}>Rotate</span>
               <button
                 onClick={() => handleRotate('ccw')}
                 className="flex items-center justify-center transition-all"
                 title="Rotate 90° CCW"
                 style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 8,
+                  width: 44,
+                  height: 44,
+                  borderRadius: 10,
                   background: '#12121a',
                   border: '1px solid #1a1a25',
                   color: '#888898',
-                  fontSize: 16
+                  fontSize: 18
                 }}
               >
                 ↺
@@ -621,32 +622,32 @@ export default function Home() {
                 className="flex items-center justify-center transition-all"
                 title="Rotate 90° CW"
                 style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 8,
+                  width: 44,
+                  height: 44,
+                  borderRadius: 10,
                   background: '#12121a',
                   border: '1px solid #1a1a25',
                   color: '#888898',
-                  fontSize: 16
+                  fontSize: 18
                 }}
               >
                 ↻
               </button>
             </div>
-            <div className="flex items-center gap-2 px-4 pb-4">
+            <div className="flex items-center gap-3 px-4 pb-4">
               <span className="text-sm font-medium" style={{ color: '#888898', minWidth: 56 }}>Mirror</span>
               <button
                 onClick={() => handleMirror('horizontal')}
                 className="flex items-center justify-center transition-all"
                 title="Mirror horizontal"
                 style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 8,
+                  width: 44,
+                  height: 44,
+                  borderRadius: 10,
                   background: '#12121a',
                   border: '1px solid #1a1a25',
                   color: '#888898',
-                  fontSize: 16
+                  fontSize: 18
                 }}
               >
                 ⇔
@@ -656,13 +657,13 @@ export default function Home() {
                 className="flex items-center justify-center transition-all"
                 title="Mirror vertical"
                 style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 8,
+                  width: 44,
+                  height: 44,
+                  borderRadius: 10,
                   background: '#12121a',
                   border: '1px solid #1a1a25',
                   color: '#888898',
-                  fontSize: 16
+                  fontSize: 18
                 }}
               >
                 ⇕
@@ -705,39 +706,76 @@ export default function Home() {
   }
 
   /* ---------- TABLET / DESKTOP LAYOUT ---------- */
+  const headerBtnStyle = {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    background: '#12121a',
+    border: '1px solid #1a1a25',
+    color: '#888898',
+    fontSize: 16
+  } as const;
+
   return (
     <div className="flex flex-col" style={{ background: '#050508', height: '100dvh' }}>
-      {/* Top Bar */}
+      {/* Top Bar — two rows: brand row + controls row */}
       <header
-        className="flex items-center justify-between px-5 py-3 shrink-0"
+        className="shrink-0"
         style={{ background: '#0c0c12', borderBottom: '1px solid #1a1a25' }}
       >
-        <div className="flex items-center gap-3">
-          <span
-            className="text-sm font-medium tracking-wider"
-            style={{ color: '#888898', letterSpacing: '0.04em' }}
-          >
-            Wavegrid
-          </span>
-          <span
-            className="w-2.5 h-2.5 rounded-full"
-            style={{ background: connected ? '#4a4' : '#d44' }}
-          />
-          {(audio.state.playing || audio.state.micActive) && (
-            <span className="text-sm animate-pulse" style={{ color: '#4a7cff' }}>{audio.state.micActive ? '🎤' : '♪'}</span>
-          )}
-          <span className="text-xs" style={{ color: '#555' }}>
-            {user}
-          </span>
-          <button
-            onClick={logout}
-            className="text-xs px-2 py-1 rounded ml-1"
-            style={{ color: '#666', background: '#12121a', border: '1px solid #1a1a25' }}
-          >
-            Logout
-          </button>
+        {/* Row 1: brand + identity */}
+        <div
+          className="flex items-center justify-between px-5"
+          style={{ paddingTop: 10, paddingBottom: 6 }}
+        >
+          <div className="flex items-center gap-3">
+            <span
+              className="text-sm font-medium tracking-wider"
+              style={{ color: '#888898', letterSpacing: '0.04em' }}
+            >
+              Wavegrid
+            </span>
+            <span
+              className="w-2.5 h-2.5 rounded-full"
+              style={{ background: connected ? '#4a4' : '#d44' }}
+            />
+            {(audio.state.playing || audio.state.micActive) && (
+              <span className="text-sm animate-pulse" style={{ color: '#4a7cff' }}>{audio.state.micActive ? '🎤' : '♪'}</span>
+            )}
+            <span className="text-xs" style={{ color: '#555' }}>
+              {user}
+            </span>
+            <button
+              onClick={logout}
+              className="text-xs px-2 py-1 rounded ml-1"
+              style={{ color: '#666', background: '#12121a', border: '1px solid #1a1a25' }}
+            >
+              Logout
+            </button>
+          </div>
+
+          {/* Orientation + layout buttons (always visible top-right) */}
+          <div className="flex items-center gap-2">
+            <button onClick={() => handleRotate('ccw')} className="flex items-center justify-center transition-all" title="Rotate 90° CCW" style={headerBtnStyle}>↺</button>
+            <button onClick={() => handleRotate('cw')} className="flex items-center justify-center transition-all" title="Rotate 90° CW" style={headerBtnStyle}>↻</button>
+            <button onClick={() => handleMirror('horizontal')} className="flex items-center justify-center transition-all" title="Mirror horizontal" style={headerBtnStyle}>⇔</button>
+            <button onClick={() => handleMirror('vertical')} className="flex items-center justify-center transition-all" title="Mirror vertical" style={headerBtnStyle}>⇕</button>
+            <button
+              onClick={() => setLayout((l) => l === 'bottom' ? 'right' : 'bottom')}
+              className="flex items-center justify-center transition-all"
+              title={layout === 'bottom' ? 'Panel: right side' : 'Panel: bottom'}
+              style={headerBtnStyle}
+            >
+              {layout === 'bottom' ? '⊟' : '⊞'}
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-5">
+
+        {/* Row 2: master sliders (full width, always visible) */}
+        <div
+          className="flex items-center gap-4 px-5"
+          style={{ paddingTop: 2, paddingBottom: 10 }}
+        >
           <MasterSliders
             masterBright={masterBright}
             smoothness={smoothness}
@@ -747,96 +785,6 @@ export default function Home() {
             onAttack={handleAttack}
             throttledSlider={throttledSlider}
           />
-
-          {/* Rotate buttons */}
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => handleRotate('ccw')}
-              className="flex items-center justify-center transition-all"
-              title="Rotate 90° CCW"
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 8,
-                background: '#12121a',
-                border: '1px solid #1a1a25',
-                color: '#888898',
-                fontSize: 16
-              }}
-            >
-              ↺
-            </button>
-            <button
-              onClick={() => handleRotate('cw')}
-              className="flex items-center justify-center transition-all"
-              title="Rotate 90° CW"
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 8,
-                background: '#12121a',
-                border: '1px solid #1a1a25',
-                color: '#888898',
-                fontSize: 16
-              }}
-            >
-              ↻
-            </button>
-          </div>
-
-          {/* Mirror buttons */}
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => handleMirror('horizontal')}
-              className="flex items-center justify-center transition-all"
-              title="Mirror horizontal"
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 8,
-                background: '#12121a',
-                border: '1px solid #1a1a25',
-                color: '#888898',
-                fontSize: 16
-              }}
-            >
-              ⇔
-            </button>
-            <button
-              onClick={() => handleMirror('vertical')}
-              className="flex items-center justify-center transition-all"
-              title="Mirror vertical"
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 8,
-                background: '#12121a',
-                border: '1px solid #1a1a25',
-                color: '#888898',
-                fontSize: 16
-              }}
-            >
-              ⇕
-            </button>
-          </div>
-
-          {/* Layout toggle */}
-          <button
-            onClick={() => setLayout((l) => l === 'bottom' ? 'right' : 'bottom')}
-            className="flex items-center justify-center transition-all"
-            title={layout === 'bottom' ? 'Panel: right side' : 'Panel: bottom'}
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 8,
-              background: '#12121a',
-              border: '1px solid #1a1a25',
-              color: '#888898',
-              fontSize: 16
-            }}
-          >
-            {layout === 'bottom' ? '⊟' : '⊞'}
-          </button>
         </div>
       </header>
 

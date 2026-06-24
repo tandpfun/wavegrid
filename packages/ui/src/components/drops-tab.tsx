@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef } from 'react';
 
+import { ControlGrid, ControlGroup } from './control-grid';
+
 interface DropsConfig {
   spectrumStart: number;
   spectrumEnd: number;
@@ -187,12 +189,9 @@ export function DropsControls({
   }, [config, onChange]);
 
   return (
-    <div className="space-y-3">
+    <ControlGrid minCellWidth={220}>
       {/* Spectrum range */}
-      <div>
-        <p className="text-sm font-medium mb-2" style={{ color: '#888898', letterSpacing: '0.05em' }}>
-          Spectrum
-        </p>
+      <ControlGroup label="Spectrum">
         <div
           className="relative"
           style={{ touchAction: 'none' }}
@@ -270,35 +269,34 @@ export function DropsControls({
           <span className="text-xs font-mono" style={{ color: '#888898', fontSize: 9 }}>{config.spectrumStart}°</span>
           <span className="text-xs font-mono" style={{ color: '#888898', fontSize: 9 }}>{config.spectrumEnd}°</span>
         </div>
-      </div>
+      </ControlGroup>
 
       {/* Sliders */}
-      <div className="flex gap-4 flex-wrap">
+      <ControlGroup label="Parameters">
         {[
           { label: 'Speed', key: 'speed' as const, min: 1, max: 10, val: config.speed },
           { label: 'Decay', key: 'decay' as const, min: 1, max: 10, val: config.decay },
           { label: 'Width', key: 'width' as const, min: 1, max: 5, val: config.width }
         ].map((s) => (
-          <div key={s.key} className="flex items-center gap-2">
-            <span className="text-sm font-medium" style={{ color: '#888898' }}>{s.label}</span>
+          <div key={s.key} className="flex items-center gap-3">
+            <span className="text-sm font-medium shrink-0" style={{ color: '#888898', minWidth: 44 }}>{s.label}</span>
             <input
               type="range"
+              className="flex-1"
               min={s.min}
               max={s.max}
               value={s.val}
               onChange={(e) => handleSliderChange(s.key, Number(e.target.value))}
-              style={{ width: 80 }}
             />
-            <span className="text-sm font-mono" style={{ color: '#888898', minWidth: 18, textAlign: 'right' }}>
+            <span className="text-sm font-mono shrink-0" style={{ color: '#888898', minWidth: 18, textAlign: 'right' }}>
               {s.val}
             </span>
           </div>
         ))}
-      </div>
-
-      <p className="text-sm" style={{ color: 'rgba(136,136,152,0.5)' }}>
-        Tap on the grid to create ripples
-      </p>
-    </div>
+        <p className="text-sm" style={{ color: 'rgba(136,136,152,0.5)' }}>
+          Tap on the grid to create ripples
+        </p>
+      </ControlGroup>
+    </ControlGrid>
   );
 }
