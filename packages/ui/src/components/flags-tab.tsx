@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { ControlGrid, ControlGroup } from './control-grid';
+
 const ROWS = 7;
 const COLS = 7;
 
@@ -397,83 +399,87 @@ export function FlagsTab({
   onPurpleBlack: (v: boolean) => void;
 }) {
   return (
-    <div className="space-y-3">
+    <ControlGrid minCellWidth={240}>
       {/* Flag swatches */}
-      <div className="flex gap-2.5 flex-wrap">
-        {FLAGS.map((flag) => (
-          <button
-            key={flag.name}
-            onClick={() => onSelectFlag(flag.name, flag)}
-            className="relative overflow-hidden transition-transform active:scale-93"
-            style={{
-              width: 72,
-              height: 72,
-              borderRadius: 16,
-              background: flag.gradient,
-              border: activeFlag === flag.name ? '2.5px solid #fff' : '2.5px solid transparent'
-            }}
-          >
-            <span
-              className="absolute bottom-1 left-0 right-0 text-center text-white font-semibold"
+      <ControlGroup label="Flags">
+        <div className="flex gap-2.5 flex-wrap">
+          {FLAGS.map((flag) => (
+            <button
+              key={flag.name}
+              onClick={() => onSelectFlag(flag.name, flag)}
+              className="relative overflow-hidden transition-transform active:scale-93"
               style={{
-                fontSize: 9,
-                textShadow: '0 1px 4px rgba(0,0,0,0.8)',
-                letterSpacing: '0.02em'
+                width: 72,
+                height: 72,
+                borderRadius: 16,
+                background: flag.gradient,
+                border: activeFlag === flag.name ? '2.5px solid #fff' : '2.5px solid transparent'
               }}
             >
-              {flag.name}
-            </span>
-          </button>
-        ))}
-      </div>
+              <span
+                className="absolute bottom-1 left-0 right-0 text-center text-white font-semibold"
+                style={{
+                  fontSize: 9,
+                  textShadow: '0 1px 4px rgba(0,0,0,0.8)',
+                  letterSpacing: '0.02em'
+                }}
+              >
+                {flag.name}
+              </span>
+            </button>
+          ))}
+        </div>
+      </ControlGroup>
 
-      {/* Effect toggles */}
-      <div className="flex gap-2 flex-wrap items-center">
-        <span className="text-sm font-medium" style={{ color: '#888898', letterSpacing: '0.05em' }}>FX</span>
-        {EFFECTS.map((fx) => (
-          <button
-            key={fx.key}
-            onClick={() => onEffect(fx.key)}
-            className="transition-all"
-            style={{
-              padding: '8px 16px',
-              borderRadius: 20,
-              fontSize: 13,
-              fontWeight: 500,
-              background: effect === fx.key ? '#1a1a2e' : 'transparent',
-              border: effect === fx.key ? '1px solid #333' : '1px solid #1a1a25',
-              color: effect === fx.key ? '#e8e8f0' : '#666'
-            }}
-          >
-            {fx.label}
-          </button>
-        ))}
-      </div>
+      {/* Effects */}
+      <ControlGroup label="Effects">
+        <div className="flex gap-2 flex-wrap items-center">
+          <span className="text-sm font-medium" style={{ color: '#888898', letterSpacing: '0.05em' }}>FX</span>
+          {EFFECTS.map((fx) => (
+            <button
+              key={fx.key}
+              onClick={() => onEffect(fx.key)}
+              className="transition-all"
+              style={{
+                padding: '8px 16px',
+                borderRadius: 20,
+                fontSize: 13,
+                fontWeight: 500,
+                background: effect === fx.key ? '#1a1a2e' : 'transparent',
+                border: effect === fx.key ? '1px solid #333' : '1px solid #1a1a25',
+                color: effect === fx.key ? '#e8e8f0' : '#666'
+              }}
+            >
+              {fx.label}
+            </button>
+          ))}
+        </div>
 
-      {/* Dark purple toggle */}
-      <button
-        onClick={() => onPurpleBlack(!purpleBlack)}
-        className="flex items-center gap-2 transition-all"
-        style={{
-          padding: '8px 16px',
-          borderRadius: 20,
-          fontSize: 13,
-          fontWeight: 500,
-          background: purpleBlack ? '#2a1a3e' : 'transparent',
-          border: purpleBlack ? '1px solid #5a3a7e' : '1px solid #1a1a25',
-          color: purpleBlack ? '#c8a0f0' : '#666'
-        }}
-      >
-        <span style={{
-          display: 'inline-block',
-          width: 10,
-          height: 10,
-          borderRadius: '50%',
-          background: purpleBlack ? '#7b2ff7' : '#222',
-          border: '1px solid #444'
-        }} />
+        {/* Dark purple toggle */}
+        <button
+          onClick={() => onPurpleBlack(!purpleBlack)}
+          className="flex items-center gap-2 transition-all"
+          style={{
+            padding: '8px 16px',
+            borderRadius: 20,
+            fontSize: 13,
+            fontWeight: 500,
+            background: purpleBlack ? '#2a1a3e' : 'transparent',
+            border: purpleBlack ? '1px solid #5a3a7e' : '1px solid #1a1a25',
+            color: purpleBlack ? '#c8a0f0' : '#666'
+          }}
+        >
+          <span style={{
+            display: 'inline-block',
+            width: 10,
+            height: 10,
+            borderRadius: '50%',
+            background: purpleBlack ? '#7b2ff7' : '#222',
+            border: '1px solid #444'
+          }} />
         Black → Purple
-      </button>
-    </div>
+        </button>
+      </ControlGroup>
+    </ControlGrid>
   );
 }

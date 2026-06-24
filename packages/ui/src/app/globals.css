@@ -32,32 +32,50 @@ html, body {
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
-  height: 6px;
-  border-radius: 3px;
+  height: 10px;
+  border-radius: 5px;
   background: linear-gradient(to right, #1a1a2a, var(--color-accent));
   outline: none;
+  padding: 8px 0;
+  background-clip: content-box;
 }
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: var(--color-accent);
   box-shadow: 0 0 12px var(--color-accent-glow);
   cursor: pointer;
 }
 
+input[type="range"]::-moz-range-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 12px var(--color-accent-glow);
+  cursor: pointer;
+  border: none;
+}
+
 /* Larger hit area for sliders on touch devices */
 @media (pointer: coarse) {
   input[type="range"] {
-    height: 8px;
-    border-radius: 4px;
+    height: 12px;
+    border-radius: 6px;
+    padding: 14px 0;
     min-height: 44px;
   }
 
   input[type="range"]::-webkit-slider-thumb {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 36px;
+    height: 36px;
   }
 }
