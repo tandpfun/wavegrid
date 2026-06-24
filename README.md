@@ -16,7 +16,7 @@
 
 Grid size defaults to 7x7 (49 cannons) but is fully configurable for any layout.
 
-## Run Locally (prod-like)
+## Run Locally 
 
 The stack is three processes. The only dev-vs-prod difference is the UI: prod serves a Next.js production build (`build:ui` → `start:ui`) with `NEXT_PUBLIC_SIMULATOR_URL` baked in at build time; dev uses `dev:ui` with hot reload.
 
