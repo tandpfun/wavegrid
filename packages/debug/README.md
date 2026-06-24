@@ -11,7 +11,7 @@ Interactive 7×7 grid debugger for the Wavegrid laser cannon array.
 - Auto-assign identity mapping based on orientation
 - Flash sequence for calibration
 - JSON export/import of zone mappings
-- WebSocket connection to simulator for live control
+- WebSocket connection to server for live control
 
 ## Usage
 
@@ -24,7 +24,7 @@ pnpm dev:debug
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `SIMULATOR_URL` | `ws://localhost:3000` | WebSocket URL of the simulator |
+| `SIMULATOR_URL` | `ws://localhost:3000` | WebSocket URL of the server |
 | `DEBUG_PORT` | `3005` | HTTP server port |
 
 Example on a remote droplet:

@@ -35,7 +35,7 @@ Next.js 15 frontend for the Wavegrid laser grid controller. Built with React 19 
 pnpm dev:ui        # → http://localhost:3003
 ```
 
-Requires the Simulator running on `:3000`:
+Requires the Server running on `:3000`:
 ```bash
 pnpm dev:server    # start the server first
 pnpm dev:ui        # then the UI
@@ -47,7 +47,7 @@ pnpm dev:ui        # then the UI
 |----------|---------|-------------|
 | `NEXT_PUBLIC_NUM_CANNONS` | `49` | Total number of cannons in the grid |
 | `NEXT_PUBLIC_GRID_COLUMNS` | `7` | Number of columns in the grid layout |
-| `NEXT_PUBLIC_SIMULATOR_URL` | `ws://localhost:3000` | WebSocket URL of the Simulator |
+| `NEXT_PUBLIC_SIMULATOR_URL` | `ws://localhost:3000` | WebSocket URL of the Server |
 
 ## Tech Stack
 

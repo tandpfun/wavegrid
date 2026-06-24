@@ -23,7 +23,7 @@ deploy/cloud.sh status
 deploy/cloud.sh stop
 ```
 
-Processes: `wavegrid-sim` (`pnpm dev:server`, binds `0.0.0.0:SIM_PORT`) and
+Processes: `wavegrid-server` (`pnpm dev:server`, binds `0.0.0.0:SIM_PORT`) and
 `wavegrid-ui` (`pnpm dev:ui`, serves `:3003`). Both auto-restart on crash. See
 `ecosystem.config.js`.
 
@@ -56,11 +56,11 @@ Configure OSC output in `deploy\.env` — either a single BEYOND target
 | var                         | machine | default          | notes                              |
 | --------------------------- | ------- | ---------------- | ---------------------------------- |
 | `CLOUD_IP`                  | both    | —                | **secret**; server address          |
-| `SIM_PORT`                  | both    | `3000`           | simulator WebSocket port            |
-| `NUM_CANNONS` / `GRID_COLUMNS` | both | `49` / `7`       | must match across sim + receiver    |
-| `AUTH_PASSWORD`             | cloud   | —                | simulator auth                      |
-| `NEXT_PUBLIC_SIMULATOR_URL` | cloud   | `ws://CLOUD_IP:SIM_PORT` | ui → sim (derived)          |
-| `SIMULATOR_URL`             | pangolin| `ws://CLOUD_IP:SIM_PORT` | receiver → sim (derived)    |
+| `SIM_PORT`                  | both    | `3000`           | server WebSocket port               |
+| `NUM_CANNONS` / `GRID_COLUMNS` | both | `49` / `7`       | must match across server + receiver |
+| `AUTH_PASSWORD`             | cloud   | —                | server auth                         |
+| `NEXT_PUBLIC_SIMULATOR_URL` | cloud   | `ws://CLOUD_IP:SIM_PORT` | ui → server (derived)       |
+| `SIMULATOR_URL`             | pangolin| `ws://CLOUD_IP:SIM_PORT` | receiver → server (derived) |
 | `RECEIVER_ALPHA`            | pangolin| `0.06`           | smoothing                           |
 | `FALLBACK_DELAY`            | pangolin| `3000`           | ms before sine fallback             |
 | `BEYOND_HOST`/`BEYOND_PORT` | pangolin| — / `7001`       | single BEYOND OSC target            |

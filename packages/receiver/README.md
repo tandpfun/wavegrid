@@ -10,7 +10,7 @@
   </a>
 </p>
 
-The **brain** of the Wavegrid installation. Sits between the control layer (Canvas/Simulator) and the physical hardware (BEYOND/OSC via `@wavegrid/osc`).
+The **brain** of the Wavegrid installation. Sits between the control layer (Canvas/Server) and the physical hardware (BEYOND/OSC via `@wavegrid/osc`).
 
 ## Design Principles
 
@@ -22,7 +22,7 @@ The **brain** of the Wavegrid installation. Sits between the control layer (Canv
 ## Architecture
 
 ```
-Canvas ──ws──▶ Simulator ──ws──▶ Receiver ──adapter──▶ Hardware
+Canvas ──ws──▶ Server ──ws──▶ Receiver ──adapter──▶ Hardware
                                     │
                               own LP filter
                               sine fallback
@@ -33,7 +33,7 @@ Canvas ──ws──▶ Simulator ──ws──▶ Receiver ──adapter─�
 
 ```sh
 pnpm dev:receiver
-# Connects to simulator at ws://localhost:3000
+# Connects to server at ws://localhost:3000
 # Outputs state to console (or hardware when configured)
 ```
 
@@ -81,7 +81,7 @@ receiver.start();
 
 | Adapter | Direction | Purpose |
 |---------|-----------|---------|
-| `WebSocketInput` | Input | Connects to upstream simulator/server |
+| `WebSocketInput` | Input | Connects to upstream server |
 | `ConsoleOutput` | Output | Logs frames to console (dev/debug) |
 | `CallbackOutput` | Output | Calls your function each tick |
 | `MultiOutput` | Output | Fans out to N adapters at once |
