@@ -7,7 +7,7 @@
     },
     "pc2": {
       "type": "beyond",
-      "host": "192.168.0.15",
+      "host": "PC2_IP",
       "port": 7001
     }
   },
