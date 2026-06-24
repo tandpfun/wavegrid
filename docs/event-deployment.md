@@ -28,7 +28,7 @@ graph LR
 
 | Device | Role | Talks to |
 |--------|------|----------|
-| **Cloud server** | Runs Simulator + UI | Serves iPads, feeds Receiver |
+| **Cloud server** | Runs Server + UI | Serves iPads, feeds Receiver |
 | **iPads** | Artist interface (browser) | Connects to Cloud UI |
 | **Pangolin PC** | Runs Receiver → BEYOND | Pulls from Cloud, sends OSC locally |
 
@@ -148,5 +148,5 @@ graph TD
 | UI loads but painting does nothing | Check `NEXT_PUBLIC_SIMULATOR_URL` — browser must reach the cloud server's port 3000 |
 | Receiver connects but no laser response | Verify BEYOND's OSC server is on port 7001, and "Show R-G-B-A panel" is enabled in BEYOND settings |
 | Colors wrong in `rgb` mode | Confirm `alpha` is being sent (check `DEBUG_OSC=1` output for `/livecontrol/alpha 255`) |
-| Receiver can't connect to simulator | Check cloud firewall allows inbound on port 3000 |
+| Receiver can't connect to server | Check cloud firewall allows inbound on port 3000 |
 | White shows as red | Ensure BEYOND's RGBA panel is enabled: Settings → Configuration → Live Control → Extra Controls → "Show R-G-B-A panel" |

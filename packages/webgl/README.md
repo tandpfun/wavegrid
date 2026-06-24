@@ -2,7 +2,7 @@
 
 WebGL 3D viewer for the 7×7 laser installation at San Francisco's Civic Center Plaza. Built with Three.js + postprocessing bloom.
 
-**This is a viewer only** — all beam state comes from the Simulator via WebSocket. The controller UI (`@wavegrid/ui`) drives the animations, scenes, and audio; this package just renders the 3D result.
+**This is a viewer only** — all beam state comes from the Server via WebSocket. The controller UI (`@wavegrid/ui`) drives the animations, scenes, and audio; this package just renders the 3D result.
 
 ## Quick Start
 
@@ -12,7 +12,7 @@ pnpm dev:server # start Server on :3000
 pnpm dev:webgl  # start 3D viewer on :3004
 ```
 
-Open `http://localhost:3004` and the viewer connects to the Simulator automatically.
+Open `http://localhost:3004` and the viewer connects to the Server automatically.
 
 ## Scene
 
@@ -38,7 +38,7 @@ Open `http://localhost:3004` and the viewer connects to the Simulator automatica
 
 ## WebSocket Protocol
 
-Connects to the Simulator at `ws://localhost:3000` (same as Canvas and UI). Receives:
+Connects to the Server at `ws://localhost:3000` (same as Canvas and UI). Receives:
 
 ```json
 { "type": "state", "grid": [{ "h": 220, "s": 90, "b": 80 }, ...] }

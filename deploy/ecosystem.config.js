@@ -1,6 +1,6 @@
 // PM2 process definitions for the WaveGrid dev servers.
 //
-//   pm2 start deploy/ecosystem.config.js   # start sim + ui, keep them alive
+//   pm2 start deploy/ecosystem.config.js   # start server + ui, keep them alive
 //   pm2 logs                               # tail both
 //   pm2 restart deploy/ecosystem.config.js # pick up code or .env changes
 //   pm2 save                               # persist (see deploy/pm2.sh setup)
@@ -45,7 +45,7 @@ const fileEnv = loadEnv(envFile);
 
 // Derive URLs/ports from CLOUD_IP so the IP is the single source of truth.
 const SIM_PORT = fileEnv.SIM_PORT || '3000';
-if (!fileEnv.PORT) fileEnv.PORT = SIM_PORT; // simulator bind port
+if (!fileEnv.PORT) fileEnv.PORT = SIM_PORT; // server bind port
 if (!fileEnv.NEXT_PUBLIC_SIMULATOR_URL && fileEnv.CLOUD_IP) {
   fileEnv.NEXT_PUBLIC_SIMULATOR_URL = `ws://${fileEnv.CLOUD_IP}:${SIM_PORT}`;
 }
@@ -77,7 +77,7 @@ const common = {
 module.exports = {
   apps: [
     // Server still runs via ts-node — no dev/prod distinction, no overlay.
-    { ...common, name: 'wavegrid-sim', args: 'dev:server' },
+    { ...common, name: 'wavegrid-server', args: 'dev:server' },
     // UI runs the PRODUCTION server (next start). Requires `pnpm build:ui`
     // first — use `deploy/cloud.sh deploy` which builds then restarts.
     { ...common, name: 'wavegrid-ui', args: 'start:ui' },

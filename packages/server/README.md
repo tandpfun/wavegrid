@@ -10,7 +10,7 @@
   </a>
 </p>
 
-7×7 RGB grid simulator for the Illuminate project. Renders 49 virtual laser cannons with smooth interpolated transitions (low-pass filtered) — no abrupt color or brightness changes.
+7×7 RGB grid state engine for the Illuminate project. Renders 49 virtual laser cannons with smooth interpolated transitions (low-pass filtered) — no abrupt color or brightness changes.
 
 ## Usage
 

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# Local prod-parity launcher — runs the full stack (simulator + ui + receiver)
+# Local prod-parity launcher — runs the full stack (server + ui + receiver)
 # the way prod does, but entirely on localhost and without PM2.
 #
 # The only real "prod vs dev" difference is the UI: prod serves a Next.js
 # production build (`next build` then `next start`) with NEXT_PUBLIC_* baked in
-# at build time, not `next dev` with hot reload. The simulator and receiver run
+# at build time, not `next dev` with hot reload. The server and receiver run
 # via ts-node either way. This script builds the UI, then boots all three in one
 # terminal and tears them down together on Ctrl-C.
 #
-#   deploy/local.sh                build the UI, then start sim + ui + receiver
+#   deploy/local.sh                build the UI, then start server + ui + receiver
 #   deploy/local.sh --skip-build   skip the UI build (reuse the last one)
 #
 # Override before the command (defaults shown):
@@ -18,9 +18,9 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_DIR"
 
-# ── localhost-pinned config (ui + receiver point at the local simulator) ──
+# ── localhost-pinned config (ui + receiver point at the local server) ──
 export SIM_PORT="${SIM_PORT:-3000}"
-export PORT="$SIM_PORT"                                    # simulator bind port
+export PORT="$SIM_PORT"                                    # server bind port
 export NUM_CANNONS="${NUM_CANNONS:-49}"
 export GRID_COLUMNS="${GRID_COLUMNS:-7}"
 export SIMULATOR_URL="${SIMULATOR_URL:-ws://localhost:${SIM_PORT}}"            # receiver → sim

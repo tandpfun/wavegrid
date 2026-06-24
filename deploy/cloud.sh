@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Cloud server launcher (machine #1, the internet box at CLOUD_IP).
-# Runs the simulator + ui under PM2 so they stay up unattended.
+# Runs the server + ui under PM2 so they stay up unattended.
 #
-#   deploy/cloud.sh start     start (or reload) sim + ui under PM2
+#   deploy/cloud.sh start     start (or reload) server + ui under PM2
 #   deploy/cloud.sh stop      stop both
 #   deploy/cloud.sh restart   restart both (picks up code/.env changes)
 #   deploy/cloud.sh logs      tail combined logs
