@@ -52,7 +52,8 @@ function ToolContent({
   activeAnim, handleAnim,
   send,
   flags, brightness, audio,
-  isPhone
+  isPhone,
+  onShift
 }: {
   tab: GridMode;
   hue: number; sat: number; bright: number; brushSize: number; softEdge: boolean;
@@ -72,7 +73,6 @@ function ToolContent({
   brightness: ReturnType<typeof useBrightnessAnimation>;
   audio: ReturnType<typeof useAudio>;
   isPhone: boolean;
-  shiftActive: boolean;
   onShift: (vx: number, vy: number) => void;
 }) {
   return (
@@ -530,7 +530,6 @@ export default function Home() {
     send,
     flags, brightness, audio,
     isPhone,
-    shiftActive,
     onShift: handleShift
   };
 
