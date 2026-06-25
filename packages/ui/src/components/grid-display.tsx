@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef } from 'react';
 
-import type { CannonColor } from '@/lib/use-socket';
+import type { CannonColor, Orientation } from '@/lib/use-socket';
 
 export type GridMode = 'paint' | 'gradient' | 'energy' | 'drops' | 'motion' | 'scenes' | 'animations' | 'audio' | 'flags' | 'brightness' | 'settings';
 
@@ -16,10 +16,21 @@ interface GridDisplayProps {
   brushSize: number;
   softEdge: boolean;
   motionPath?: number[];
+  viewFlip?: Orientation | null;
   onCannon: (index: number, h: number, s: number, b: number) => void;
   onDrop?: (index: number) => void;
   onMotionPoint?: (index: number) => void;
   onGradientDrag?: (startIdx: number, endIdx: number) => void;
+}
+
+function orientationToCss(o: Orientation): string {
+  const parts: string[] = [];
+  // Counter-rotate: negate the server rotation
+  if (o.rotation !== 0) parts.push(`rotate(${-o.rotation}deg)`);
+  // Counter-flip
+  if (o.flipH) parts.push('scaleX(-1)');
+  if (o.flipV) parts.push('scaleY(-1)');
+  return parts.length > 0 ? parts.join(' ') : 'none';
 }
 
 function hslStr(h: number, s: number, l: number): string {
@@ -47,6 +58,7 @@ export function GridDisplay({
   brushSize,
   softEdge,
   motionPath,
+  viewFlip,
   onCannon,
   onDrop,
   onMotionPoint,
@@ -185,14 +197,37 @@ export function GridDisplay({
     if (!canvas) return -1;
     const rect = canvas.getBoundingClientRect();
     const { cellSize, gridOffset, canvasW } = sizeRef.current;
-    const x = (clientX - rect.left) * (canvasW / rect.width);
-    const y = (clientY - rect.top) * (canvasW / rect.height);
+
+    // Convert client coords to normalized canvas coords (0..canvasW)
+    let x = (clientX - rect.left) * (canvasW / rect.width);
+    let y = (clientY - rect.top) * (canvasW / rect.height);
+
+    // If viewFlip is active, undo the CSS transform on the coordinates.
+    // CSS transform order (right-to-left): scaleY → scaleX → rotate(-θ)
+    // Inverse (applied left-to-right): rotate(+θ) → scaleX → scaleY
+    if (viewFlip) {
+      const half = canvasW / 2;
+      // 1. Undo rotation: CSS applied rotate(-θ), so rotate by +θ
+      if (viewFlip.rotation !== 0) {
+        const rad = (viewFlip.rotation * Math.PI) / 180;
+        const cos = Math.cos(rad);
+        const sin = Math.sin(rad);
+        const dx = x - half;
+        const dy = y - half;
+        x = half + dx * cos + dy * sin;
+        y = half - dx * sin + dy * cos;
+      }
+      // 2. Undo flips (self-inverse)
+      if (viewFlip.flipH) x = canvasW - x;
+      if (viewFlip.flipV) y = canvasW - y;
+    }
+
     const col = Math.floor((x - gridOffset) / cellSize);
     const row = Math.floor((y - gridOffset) / cellSize);
     if (col < 0 || col >= columns || row < 0 || row >= rows) return -1;
     const idx = row * columns + col;
     return idx < grid.length ? idx : -1;
-  }, [columns, rows, grid.length]);
+  }, [columns, rows, grid.length, viewFlip]);
 
   const getAffectedCannons = useCallback((centerIdx: number): { idx: number; falloff: number }[] => {
     const result: { idx: number; falloff: number }[] = [{ idx: centerIdx, falloff: 1 }];
@@ -310,6 +345,8 @@ export function GridDisplay({
     draw();
   }, [draw]);
 
+  const flipCss = viewFlip ? orientationToCss(viewFlip) : 'none';
+
   return (
     <div
       ref={wrapRef}
@@ -320,7 +357,7 @@ export function GridDisplay({
         ref={canvasRef}
         width={600}
         height={600}
-        style={{ borderRadius: 16, touchAction: 'none', cursor: 'crosshair' }}
+        style={{ borderRadius: 16, touchAction: 'none', cursor: 'crosshair', transform: flipCss }}
         onPointerDown={handleStart}
         onPointerMove={handleMove}
         onPointerUp={handleEnd}

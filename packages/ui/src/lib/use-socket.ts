@@ -8,10 +8,17 @@ export interface CannonColor {
   b: number;
 }
 
+export interface Orientation {
+  rotation: 0 | 90 | 180 | 270;
+  flipH: boolean;
+  flipV: boolean;
+}
+
 export function useSocket(url: string) {
   const wsRef = useRef<WebSocket | null>(null);
   const [connected, setConnected] = useState(false);
   const [grid, setGrid] = useState<CannonColor[]>([]);
+  const [orientation, setOrientation] = useState<Orientation>({ rotation: 0, flipH: false, flipV: false });
 
   useEffect(() => {
     const ws = new WebSocket(url);
@@ -32,6 +39,8 @@ export function useSocket(url: string) {
         const msg = JSON.parse(e.data);
         if (msg.type === 'state' && Array.isArray(msg.grid)) {
           setGrid(msg.grid);
+        } else if (msg.type === 'orientation') {
+          setOrientation({ rotation: msg.rotation ?? 0, flipH: !!msg.flipH, flipV: !!msg.flipV });
         }
       } catch {
         // ignore
@@ -50,5 +59,5 @@ export function useSocket(url: string) {
     }
   }, []);
 
-  return { connected, grid, send };
+  return { connected, grid, orientation, send };
 }
